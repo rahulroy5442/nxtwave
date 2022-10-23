@@ -1,25 +1,28 @@
 import logo from './logo.svg';
 import './App.css';
+import {React,Component} from 'react'
+import Layout from './hoc/Layout/Layout';
+import ResoursePage from './container/Resourse/ResoursePage.js'
+import ResourseDetails from './container/ResourseDetails/ResourseDetail';
+import { Route, Routes ,Navigate,Redirect } from "react-router-dom";
+import Wrapper from './hoc/Wrapper/Wrapper';
+import ResourseDetail from './container/ResourseDetails/ResourseDetail';
+class App extends Component{
+  render()
+  {
+    
+    
+    return (
+    <Layout>
+      <Routes>
+      <Route path='/' exact element={<Wrapper WrappedComponent={ResoursePage}/>} />
+       <Route path='/:id' element={<Wrapper WrappedComponent={ResourseDetail}/>}/> 
+      </Routes>
+    </Layout>
+    );
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+  }
 }
 
 export default App;

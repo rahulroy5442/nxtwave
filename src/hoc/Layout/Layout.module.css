@@ -1,0 +1,18 @@
+.container
+{
+    width: 100%;
+
+    box-sizing: border-box;  
+    min-height: 100vh;
+    
+    height: 100%;
+    
+}
+
+.controler
+{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #F5F5F5;
+}

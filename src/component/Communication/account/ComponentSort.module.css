@@ -1,0 +1,19 @@
+.container{
+
+      display: flex;
+      height: 80%;
+      width: 80%;
+   align-items: center;
+   color:#7E858E;
+    padding-left: 20px;
+   
+   border-radius: 5px;
+   font-size: 14px;
+}
+
+.container:hover
+{
+    background-color: #D7DFE93D;
+    cursor: pointer;
+    color:black;
+}

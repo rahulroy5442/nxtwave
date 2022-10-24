@@ -1,4 +1,4 @@
-import {Component, React} from 'react'
+import React,{Component} from 'react'
 import Aux from '../../hoc/Auxiliary.js'
 import cssClass from './ResoursePage.module.css'
 import IconSearch from '../../public/Logo/IconSearch.svg';

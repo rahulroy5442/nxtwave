@@ -1,4 +1,4 @@
-import {Component, React} from 'react'
+import React,{Component} from 'react'
 import Aux from '../../hoc/Auxiliary.js'
 import cssClass from './ResourseDetail.module.css'
 import WebFont from 'webfontloader';

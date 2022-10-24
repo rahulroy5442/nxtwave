@@ -21,6 +21,7 @@ const Errorhandler=(WrrapedComponent,axios)=>{
                     this.setState({error:error.message})
                     return Promise.reject(error);
                 });
+                  //To Received Error and to display it
                this.resInterceptor = axios.interceptors.response.use(res => res, error => {
                   console.log(error.message)
                     this.setState({error: error.message});
@@ -37,10 +38,10 @@ const Errorhandler=(WrrapedComponent,axios)=>{
                 this.setState({error:null})
             }
             render(){
-                //console.log("IO");
+       
                 return(
                     <Aux>
-                        
+                        {/*Display error on the screen*/}
                             {this.state.error?this.state.error:null}              
                         
 

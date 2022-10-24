@@ -1,4 +1,4 @@
-import {Component, React,useEffect,useState} from 'react';
+import React,{Component,useEffect,useState} from 'react';
 import cssClass from './requestItem.module.css';
 import Button from '../../hoc/Buttom/Buttom';
 const ResoursItemsDetails=(props)=> 

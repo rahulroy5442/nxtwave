@@ -1,4 +1,4 @@
-import {React} from 'react'
+import React from 'react'
 import cssClass from './SearchBar.module.css'
 import IconSearch from '../../../../public/Logo/IconSearch.svg'
 const searchBar=(props)=>{

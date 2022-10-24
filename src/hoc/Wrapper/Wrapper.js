@@ -1,4 +1,4 @@
-import {React,Component, useEffect} from 'react'
+import React,{Component, useEffect} from 'react'
 
 import { Routes, Route, useParams } from 'react-router-dom';
 import Aux from '../Auxiliary';

@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import {React,Component} from 'react'
+import React,{Component} from 'react'
 import Layout from './hoc/Layout/Layout';
 import ResoursePage from './container/Resourse/ResoursePage.js'
 import ResourseDetails from './container/ResourseDetails/ResourseDetail';

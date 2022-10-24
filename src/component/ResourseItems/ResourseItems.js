@@ -1,4 +1,4 @@
-import {Component, React} from 'react';
+import React,{Component} from 'react';
 import cssClass from './requestItem.module.css';
 import { useNavigate } from 'react-router-dom';
 //Per Resourse Component

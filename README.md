@@ -16,5 +16,5 @@ In the project directory, you can run:
  
 ## Step3
 ### `npm run ProdBuild`
-  This step will build a production Ready application and store it's data in ###dist folder
+  This step will build a production Ready application and store it's data in dist folder
   

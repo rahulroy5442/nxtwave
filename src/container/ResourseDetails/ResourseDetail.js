@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import Aux from '../../hoc/Auxiliary.js'
 import cssClass from './ResourseDetail.module.css'
-import WebFont from 'webfontloader';
+
 import SearchBar from '../../component/Navigation/UI/SearchBar/SearchBar.js';
 import axios from 'axios';
 import Errorhandler from '../../hoc/ErrorHandler/ErrorHandlerWrapper.js';
@@ -9,6 +9,7 @@ import ResoursItemsDetails from '../../component/RequestDetailComponent/RequestD
 import Button from '../../hoc/Buttom/Buttom.js';
 import ResourseItemList from '../../component/resourseItemList/resourseItem';
 import Communication from  '../../component/Communication/Communication';
+import Wrapper from '../../hoc/Wrapper/Wrapper.js';
 //Resourse Detail Page for /${ResourseId}
 class ResourseDetails extends Component
 {
@@ -21,7 +22,7 @@ class ResourseDetails extends Component
                 itemTobeUpdatedId:0,
                 IstobeUpdate:false
     }
-
+   
     hidder=()=>{
         this.setState((prevstate,props)=>{
                     return {hidden:!prevstate.hidden}
@@ -29,7 +30,7 @@ class ResourseDetails extends Component
         )
     }
     Sortit=(type)=>{
-       // console.log(type)
+       // (type)
         const array=this.state.RequestItemDetails.resource_items
         if(type==1)
         {
@@ -54,7 +55,7 @@ class ResourseDetails extends Component
                 (a.title <b.title) ? 1 : (a.title > b.title) ? -1 : 0);
         }
         const updateValue=this.state.RequestItemDetails;
-       // console.log(array);
+       // (array);
         updateValue.resource_items=array
         this.setState({RequestItemDetails:updateValue})
     }
@@ -64,7 +65,7 @@ class ResourseDetails extends Component
     selectedItems=(value)=>{
          
         let myArray=this.state.itemRequestToBedelete;
-       // console.log(myArray)
+       // (myArray)
         if(myArray.includes(value))
         {
             
@@ -74,7 +75,7 @@ class ResourseDetails extends Component
             })
 
             this.setState({itemRequestToBedelete:myArray})
-           // console.log(myArray)
+           // (myArray)
             return
         }
         myArray.push(value)
@@ -95,24 +96,29 @@ class ResourseDetails extends Component
     
         axios.get(`https://media-content.ccbp.in/website/react-assignment/resource/${parameter.id}.json`).then(response=>{
            this.setState({RequestItemDetails:response.data})
-          // console.log(response.data);
+          // (response.data);
        }).catch(e=>{
            
            this.setState({Error:e})
        })
 
+     
+        // WebFont.load({
+        //     google: {
+        //       families: ['HK Grotesk']
+        //     }
+        //   });
 
-        WebFont.load({
-            google: {
-              families: ['HK Grotesk']
-            }
+          import('webfontloader').then(obj=>{
+
+            obj.load({
+                google: {
+                  families: ['HK Grotesk']
+                }
+              })
           });
     }
-    componentWillUnmount()
-    {
-        console.log("ComponentUnmount ResourseDetail")
-    }
-
+  
     removeItems=()=>{
         
        const removeElement=this.state.RequestItemDetails.resource_items.filter((val)=>{
@@ -123,7 +129,7 @@ class ResourseDetails extends Component
         }
         return true;
        })
-      // console.log(removeElement)
+      // (removeElement)
        const ReqDetails={...this.state.RequestItemDetails}
        ReqDetails.resource_items=removeElement
 
@@ -133,10 +139,10 @@ class ResourseDetails extends Component
 
         if(this.state.IstobeUpdate)
         {
-            // console.log("Update")
+            // ("Update")
             const UpdatedItems={...this.state.RequestItemDetails,...value}
 
-            //  console.log(value,this.state.RequestItemDetails,UpdatedItems)
+            //  (value,this.state.RequestItemDetails,UpdatedItems)
             this.setState({RequestItemDetails:UpdatedItems})
         }
 
@@ -147,23 +153,25 @@ class ResourseDetails extends Component
     CancelUpdate=(CallBack)=>{
 
         CallBack(this.state.RequestItemDetails)
-        console.log("WEA",this.state.RequestItemDetails)
+    
         this.setState({IstobeUpdate:false,RequestItemDetails:this.state.RequestItemDetails})
 
     }
     Goback=()=>{
         
     }
-
+    changeITNI=()=>{
+        this.setState({RequestItemDetails:{...this.state.RequestItemDetails,title:"Rahul"}})
+    }
     render()
     {
-       
-        // console.log(this.state.itemRequestToBedelete)
-        // console.log(this.state.hidden)
+       //("SKKKKKKK")
+        // (this.state.itemRequestToBedelete)
+        // (this.state.hidden)
         return(this.state.RequestItemDetails?<Aux>
              
                 <div className={cssClass.MainContaner}>
-             
+            
                 
                             
                 <div className={cssClass.requestBlock}>
@@ -173,6 +181,7 @@ class ResourseDetails extends Component
                             link={this.state.RequestItemDetails.link}
                             Description={this.state.RequestItemDetails.description}
                             category={"Category789456"}/> 
+                    
                     
 
                     

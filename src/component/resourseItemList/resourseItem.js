@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import cssClass from './resourseItem.module.css'
 import Button from "../../hoc/Buttom/Buttom"
 //Resourse Items Componet

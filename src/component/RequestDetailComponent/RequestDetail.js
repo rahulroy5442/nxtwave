@@ -3,6 +3,7 @@ import cssClass from './requestItem.module.css';
 import Button from '../../hoc/Buttom/Buttom';
 const ResoursItemsDetails=(props)=> 
 {
+    let [value,useSetUpdate]=useState(1);
   
     let [inputParams,updateField]=useState({
         title:props.title,
@@ -10,10 +11,37 @@ const ResoursItemsDetails=(props)=>
         link:props.link,
         description:props.Description
     })
-    console.log(props.Description,inputParams)  
-   
+
+    
+   useEffect(()=>{
+    console.log("Request Detail Value")
+    return ()=>{
+
+        console.log("At unmount",'Request Detail Valie')
+    }
+   },[value])
+    
+   useEffect(()=>{
+    console.log("Request Detail")
+    return ()=>{
+
+        console.log("At unmount",'Request Detail')
+    }
+   })
+   useEffect(()=>{
+    console.log("Request Detail mount")
+    return ()=>{
+
+        console.log("At unmount mount",'Request Detail')
+    }
+   },[])
     let text=inputParams.link;
     //console.log(inputParams)
+    const Change=()=>{
+        useSetUpdate((prev,sa)=>{
+            console.log("ASL",sa)
+            return prev+1})
+    }
     const ChecktheInput=(e)=>{
       // console.log(e.target.name)
         if(e.target.name=='title')
@@ -47,7 +75,7 @@ const ResoursItemsDetails=(props)=>
     return (
         
         <div className={cssClass.container}>
-    
+            {console.log('ASSSSSSSSSSSS',value)}
             <div className={cssClass.companyContainer}>
                 <img src={props.iconLink} className={cssClass.ImageContainer}/>
                 
@@ -67,6 +95,7 @@ const ResoursItemsDetails=(props)=>
                 </div>
 
                     <div style={{display:'flex',flexDirection:'row',justifyContent:'space-between',width:'200px',marginTop:'20px'}}>
+                    <Button onclick={Change} margin={'0px 0px 30px 0px'} BackGroundcolor={'#0B69FF'} color={'white'} width={'93px'} height={'40px'}>Test</Button>
                         <Button onclick={()=>props.updateResourse(inputParams)} margin={'0px 0px 30px 0px'} BackGroundcolor={'#0B69FF'} color={'white'} width={'93px'} height={'40px'}>{props.IstobeUpdate?'SUBMIT':'UPDATE'}</Button>
                         {props.IstobeUpdate?<Button onclick={()=>props.CancelUpdate(ResetValue)} margin={'0px 0px 30px 0px'} BackGroundcolor={'#D7DFE9'} color={'white'} width={'93px'} height={'40px'}>CANCEL</Button>:null}
                     </div>

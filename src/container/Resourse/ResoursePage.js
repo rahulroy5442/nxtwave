@@ -3,7 +3,7 @@ import Aux from '../../hoc/Auxiliary.js'
 import cssClass from './ResoursePage.module.css'
 import IconSearch from '../../public/Logo/IconSearch.svg';
 import ResoursItems from '../../component/ResourseItems/ResourseItems.js';
-import WebFont from 'webfontloader';
+//import WebFont from 'webfontloader';
 import SearchBar from '../../component/Navigation/UI/SearchBar/SearchBar.js';
 import axios from 'axios';
 import Errorhandler from '../../hoc/ErrorHandler/ErrorHandlerWrapper.js';
@@ -20,25 +20,21 @@ class Resourse extends Component
 
     }
     
-    componentWillUnmount()
-    {
-        console.log("ComponentUnmount Resourse Page")
-    }
+
     searchValue=(e)=>
     {
-        console.log(e.target.value);
         
         let Result;
         
         if(!e.target.value)
         {
-            console.log("Res"+this.state.Currenttab)
+           
           this.changeTag(this.state.Currenttab)
         }
         else
         {
             
-            console.log(this.state.RequestItemListBackUp)
+  
              Result=this.state.RequestItemListBackUp.map(res=>{
                 if(res==null)
                 {
@@ -53,7 +49,7 @@ class Resourse extends Component
                     return res;
                 return null;
             })
-            console.log(Result)
+          
 
             
             this.setState({RequestItemList:Result})
@@ -70,26 +66,34 @@ class Resourse extends Component
            
             this.setState({RequestItemList:response.data})
             this.setState({RequestItemListBackUp:response.data})
-          // console.log(response.data);
+   
        }).catch(e=>{
       
         console.log(e)
        })
 
 
-        WebFont.load({
-            google: {
-              families: ['HK Grotesk']
-            }
+        // WebFont.load({
+        //     google: {
+        //       families: ['HK Grotesk']
+        //     }
+        //   });
+
+       
+        import('webfontloader').then(obj=>{
+
+            obj.load({
+                google: {
+                  families: ['HK Grotesk']
+                }
+              })
           });
-
-
     }
 
     changeTag=async (value)=>{
 
        
-        console.log(value)
+        
         let mainArray;
         this.setState({Currenttab:value})
         await axios.get('https://media-content.ccbp.in/website/react-assignment/resources.json').then(response=>{
@@ -130,7 +134,7 @@ class Resourse extends Component
            
            this.setState({Error:e})
        })
-       console.log(mainArray);
+   
        this.setState({RequestItemList:mainArray});
        this.setState({RequestItemListBackUp:mainArray})
           //Request Tag

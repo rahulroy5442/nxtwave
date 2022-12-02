@@ -8,7 +8,7 @@ const ResoursItems=(props)=>
     let text=props.link;
 
     const gotonavigator=()=>{
-        console.log(props.id)
+        // console.log(props.id)
         history(`/${props.id}`)
     }
 

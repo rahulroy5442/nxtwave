@@ -3,6 +3,9 @@ import cssClass from './SearchBar.module.css'
 import IconSearch from '../../../../public/Logo/IconSearch.svg'
 const searchBar=(props)=>{
    
+    const imageSrc={
+        IconSearch:'../../../../public/Logo/IconSearch.svg'
+    }
     return(
         <div className={cssClass.searchBar}>
                         

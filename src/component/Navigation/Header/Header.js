@@ -5,7 +5,10 @@ import NxtWaveLogo from '../../../public/Logo/NxtWaveLogo.svg'
 import userLogo from '../../../public/Logo/SampleLogo.jpg'
 const Header=()=>{
 
-    
+    const imageSrc={
+        NxtWaveLogo:'../../../public/Logo/NxtWaveLogo.svg',
+        userLogo:'../../../public/Logo/SampleLogo.jpg'
+    }
     return(
       
         <Aux>

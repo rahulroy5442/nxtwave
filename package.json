@@ -1,4 +1,5 @@
 {
+  "homepage":"https://rahulroy5442.github.io/nxtwave/",
   "name": "nxt-wave",
   "version": "0.1.0",
   "private": true,
@@ -38,7 +39,6 @@
     "jest": "jest --watchAll --config=jestconfig.json",
     "eject": "react-scripts eject",
     "ProdBuild": "rimraf dist && webpack --config webpack.prod.js",
-    "predeploy": "npm run ProdBuild",
     "deploy": "gh-pages -d dist",
     "dev": "npm-run-all --parallel dev:*:* dev:*",
     "dev:Build:Client": "webpack --config webpack.client.js --watch",

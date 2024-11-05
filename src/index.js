@@ -24,7 +24,7 @@ loadableReady(()=>{
 	ReactDOM.hydrateRoot (document.getElementById('root'),
 		<Provider store={store}>
  
-			<BrowserRouter >
+			<BrowserRouter basename='nxtwave'>
 				<App/> 
 			</BrowserRouter> 
     

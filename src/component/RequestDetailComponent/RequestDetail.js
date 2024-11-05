@@ -14,7 +14,7 @@ const ResoursItemsDetails=(props)=>
 
     
    useEffect(()=>{
-    console.log("Request Detail Value")
+   // console.log("Request Detail Value")
     return ()=>{
 
         console.log("At unmount",'Request Detail Valie')
@@ -22,14 +22,14 @@ const ResoursItemsDetails=(props)=>
    },[value])
     
    useEffect(()=>{
-    console.log("Request Detail")
+   // console.log("Request Detail")
     return ()=>{
 
         console.log("At unmount",'Request Detail')
     }
    })
    useEffect(()=>{
-    console.log("Request Detail mount")
+   //console.log("Request Detail mount")
     return ()=>{
 
         console.log("At unmount mount",'Request Detail')
@@ -75,7 +75,7 @@ const ResoursItemsDetails=(props)=>
     return (
         
         <div className={cssClass.container}>
-            {console.log('ASSSSSSSSSSSS',value)}
+        
             <div className={cssClass.companyContainer}>
                 <img src={props.iconLink} className={cssClass.ImageContainer}/>
                 
@@ -95,7 +95,7 @@ const ResoursItemsDetails=(props)=>
                 </div>
 
                     <div style={{display:'flex',flexDirection:'row',justifyContent:'space-between',width:'200px',marginTop:'20px'}}>
-                    <Button onclick={Change} margin={'0px 0px 30px 0px'} BackGroundcolor={'#0B69FF'} color={'white'} width={'93px'} height={'40px'}>Test</Button>
+                   
                         <Button onclick={()=>props.updateResourse(inputParams)} margin={'0px 0px 30px 0px'} BackGroundcolor={'#0B69FF'} color={'white'} width={'93px'} height={'40px'}>{props.IstobeUpdate?'SUBMIT':'UPDATE'}</Button>
                         {props.IstobeUpdate?<Button onclick={()=>props.CancelUpdate(ResetValue)} margin={'0px 0px 30px 0px'} BackGroundcolor={'#D7DFE9'} color={'white'} width={'93px'} height={'40px'}>CANCEL</Button>:null}
                     </div>

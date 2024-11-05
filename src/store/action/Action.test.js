@@ -1,31 +1,37 @@
-import { render, screen } from '@testing-library/react';
-import { shallow } from 'enzyme';
-import App from './App';
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import reportWebVitals from './reportWebVitals';
-import {BrowserRouter} from 'react-router-dom';
+import React from "react";
+import moxios from 'moxios';
+import axios from "axios";
+
+jest.mock('./Action.js')
+// jest.mock('./Action.js',()=>{
+// 	const originalModule = jest.requireActual("./Action.js");
+
+// 	return{ __esModule: true,
+// 		...originalModule,
+// 		AddResourseItems: jest.fn().mockReturnValue({type: "mock" }),}
+// });
+import * as action from './Action'
+
+
+
+
+
+import {mount} from 'enzyme';
+import { Provider } from "react-redux";
+//import './index.css';
+
 import 'babel-polyfill';
-import {Provider} from 'react-redux';
-import { loadableReady } from '@loadable/component';
+
 import { createStore, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
-import CombineReducer from './store/reducer/CombineReducer';
-import * as action from "./store/action/Action.js";
-import axios from 'axios';
-jest.mock('./store/action/Action.js',()=>{
-	const originalModule = jest.requireActual("./store/action/Action.js");
+import CombineReducer from '../reducer/CombineReducer';
+import { MemoryRouter } from 'react-router';
+import App from "../../App";
+import renderer from 'react-test-renderer';
 
-	return{ __esModule: true,
-		...originalModule,
-		AddResourseItems: jest.fn().mockReturnValue( {type:'AddItems',AddResourseItems:{"id":"Roytion"}} )
-    }
-});
 const InitalAxios=axios.create({
 	baseURL:'https://media-content.ccbp.in/website/react-assignment'
 });
-var w2=(initstate)=>createStore(CombineReducer(),initstate,applyMiddleware(thunk.withExtraArgument(InitalAxios)));
 const initalLoader={
 	"id": "1",
 	"title": "Nickelson and Sons",
@@ -70,22 +76,37 @@ const initalLoader={
 	}
 	]
 	}
-describe("App",()=>{
-    let eachStore;
-    beforeEach(()=>{
-        eachStore=w2({ResourseItems:{ResourseItems:{...initalLoader},
-            ReError:null}})
+
+const shallowCom=()=>{
+	const store=createStore(CombineReducer(),applyMiddleware(thunk.withExtraArgument(InitalAxios)));
+		return store
+}
+	const wrapperMount=(url,store)=>{
+		return mount(<Provider store={store}>
+			<MemoryRouter initialEntries={[ url]}>
+				  <App/>
+			</MemoryRouter>
+			</Provider>)
+	}
+
+
+describe('Testing',()=>{
+    beforeEach(()=>
+    {
+        moxios.install(axios);
     })
-    test('renders learn react link', () => {
-    shallow(<App/>)
-    });
+    
+    test('Testing Action',async ()=>{
+       // console.log(action.AddResourseItems());
 
-
-    test("Store",()=>{
-
-        eachStore.dispatch(action.AddResourseItems())
-
-        console.log(eachStore.getState())
+        let store=shallowCom();
+		wrapperMount('/4',store);
+	await	setTimeout(()=>{
+			expect(action.AddResourseItems).toHaveBeenCalledTimes(1);
+		},15000)
+      //  expect(action.AddResourseItems).toHaveBeenCalledTimes(1);
     })
-
 })
+
+    
+  

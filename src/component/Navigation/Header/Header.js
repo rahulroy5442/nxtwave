@@ -12,7 +12,7 @@ const Header=()=>{
     return(
       
         <Aux>
-        <div className={cssClass.container}> 
+        <div data-test="Resourcelayout" className={cssClass.container}> 
         <img src={NxtWaveLogo} className={cssClass.NxtWaveLogoContainer}/>     
         <img src={userLogo} className={cssClass.UserLogo}/> 
         

@@ -4,16 +4,33 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from 'react-router-dom';
-import { hydrate } from 'react-dom';
-const root = ReactDOM.createRoot(document.getElementById('root'));
-hydrate(
-  <React.StrictMode>
-    <BrowserRouter >
-    <App />
-    </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+import 'babel-polyfill';
+import {Provider} from 'react-redux';
+import { loadableReady } from '@loadable/component';
+import { createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import CombineReducer from './store/reducer/CombineReducer';
+import axios from 'axios';
+
+const InitalAxios=axios.create({
+	baseURL:'https://media-content.ccbp.in/website/react-assignment'
+});
+//const composeEnhancer=process.env.NODE_ENV==='development'? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__:null || compose
+
+
+const store=createStore(CombineReducer(),window.INITIAL_STATE,applyMiddleware(thunk.withExtraArgument(InitalAxios)));
+
+loadableReady(()=>{
+	ReactDOM.hydrateRoot (document.getElementById('root'),
+		<Provider store={store}>
+ 
+			<BrowserRouter >
+				<App/> 
+			</BrowserRouter> 
+    
+		</Provider>);
+});
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

@@ -1,6 +1,10 @@
 import React,{Component} from 'react';
 import cssClass from './requestItem.module.css';
 import { useNavigate } from 'react-router-dom';
+
+import axios from 'axios';
+import { Redirect } from 'react-router-dom';
+// import store from '../../server/Store/NewStore'
 //Per Resourse Component
 const ResoursItems=(props)=> 
 {
@@ -9,9 +13,25 @@ const ResoursItems=(props)=>
 
     const gotonavigator=()=>{
         // console.log(props.id)
+       //location.assign(`/${props.id}`)
+      //await new Promise
+    //   console.log('cgg')
+    
+    //   StoragePoint.push({id:props.id})
+    //   console.log(StoragePoint)
+      axios.get(`https://media-content.ccbp.in/website/react-assignment/resource/${props.id}.json`).then(response=>{
+     //   console.log("Checker response",response)
+        
+   }).catch(e=>{
+    console.log(e)
+       
+   })
+
+//location.href = `/${props.id}`;
+//console.log(store.getState())
         history(`/${props.id}`)
     }
-
+//nf
     
     return (
         

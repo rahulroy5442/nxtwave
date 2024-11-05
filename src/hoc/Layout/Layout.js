@@ -10,10 +10,10 @@ class Layout extends Component
         return(
            
           <Aux>
-          <div className={cssClass.controler}>
+          <div data-test="Resourcelayout" className={cssClass.controler}>
           <Header/> 
-          
-          <div className={cssClass.container}>
+          <input type='text' />
+          <div data-test="Resourcelayout" className={cssClass.container}>
                 {this.props.children}
           </div>
 

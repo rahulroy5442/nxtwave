@@ -1,4 +1,4 @@
-import React,{Component} from 'react'
+import React,{Component, useEffect, useState} from 'react'
 import Aux from '../../hoc/Auxiliary.js'
 import cssClass from './ResoursePage.module.css'
 import IconSearch from '../../public/Logo/IconSearch.svg';
@@ -7,35 +7,37 @@ import ResoursItems from '../../component/ResourseItems/ResourseItems.js';
 import SearchBar from '../../component/Navigation/UI/SearchBar/SearchBar.js';
 import axios from 'axios';
 import Errorhandler from '../../hoc/ErrorHandler/ErrorHandlerWrapper.js';
+import { Link } from "react-router-dom";
 //Main Resourse Page for location /
-class Resourse extends Component
+const Resourse=()=>
 {
-    state={
-        RequestItemList:[
-                ],
-
-                Error:{},
-                Currenttab:0,
-                RequestItemListBackUp:[]
-
-    }
+    const [RequestItemList,setRequestItemList]=useState([])
+    const [RequestItemListBackUp,setRequestItemListBackUp]=useState([])
+    const [Error,setError]=useState({})
+    const [Currenttab,setCurrenttab]=useState(0)
+    // state={
+       
+//kcjvjgmg
+             
+    //             Currenttab:0,
+    // }
     
 
-    searchValue=(e)=>
+    const searchValue=(e)=>
     {
-        
+        console.log("JKQWER")
         let Result;
         
         if(!e.target.value)
         {
            
-          this.changeTag(this.state.Currenttab)
+          changeTag(Currenttab)
         }
         else
         {
             
   
-             Result=this.state.RequestItemListBackUp.map(res=>{
+             Result=RequestItemListBackUp.map(res=>{
                 if(res==null)
                 {
                     return null;
@@ -52,20 +54,19 @@ class Resourse extends Component
           
 
             
-            this.setState({RequestItemList:Result})
+            setRequestItemList(Result)
         }
         
       
     }
   
-    componentDidMount()
-    {
+    useEffect(()=>{
         
         
         axios.get('https://media-content.ccbp.in/website/react-assignment/resources.json').then(response=>{
            
-            this.setState({RequestItemList:response.data})
-            this.setState({RequestItemListBackUp:response.data})
+            setRequestItemList(response.data)
+            setRequestItemListBackUp(response.data)
    
        }).catch(e=>{
       
@@ -88,14 +89,14 @@ class Resourse extends Component
                 }
               })
           });
-    }
+    },[])
 
-    changeTag=async (value)=>{
+    const changeTag=async (value)=>{
 
        
         
         let mainArray;
-        this.setState({Currenttab:value})
+        setCurrenttab(value)
         await axios.get('https://media-content.ccbp.in/website/react-assignment/resources.json').then(response=>{
           // console.log(response.data);
            
@@ -132,41 +133,45 @@ class Resourse extends Component
 
        }).catch(e=>{
            
-           this.setState({Error:e})
+           setError({Error:e})
        })
    
-       this.setState({RequestItemList:mainArray});
-       this.setState({RequestItemListBackUp:mainArray})
+       setRequestItemList(mainArray);
+       setRequestItemListBackUp(mainArray)
           //Request Tag
        
     }
-    render()
-    {
-        const arrCss=[cssClass.column];
-        arrCss.push(cssClass.overRiiber)
+    
+        const arrCss=[cssClass.column,cssClass.overRiiber];
+        //arrCss.push(cssClass.overRiiber)
+        const dontsubmit=(e)=>{
+            console.log(9)
+            e.preventDefault()
+        }
         return(
             <Aux>
-                <div className={cssClass.MainContaner}>
+                <a href='/9' onclick={dontsubmit}>Click me</a>
+                <div data-test="ResourcePage" className={cssClass.MainContaner}>
                     {/*Navigator*/ /*Resourse , Request User*/}
                 <ul className={cssClass.container}>
-                    <li className={this.state.Currenttab==0?arrCss.join(' '):cssClass.column}  onClick={()=>this.changeTag(0)}>Resourse</li>
-                    <li className={this.state.Currenttab==1?arrCss.join(' '):cssClass.column}  onClick={()=>this.changeTag(1)}>Request</li>
-                    <li className={this.state.Currenttab==2?arrCss.join(' '):cssClass.column} onClick={()=>this.changeTag(2)}>User</li>
+                    <li className={Currenttab==0?arrCss.join(' '):cssClass.column}  onClick={()=>changeTag(0)}>Resourse</li>
+                    <li className={Currenttab==1?arrCss.join(' '):cssClass.column}  onClick={()=>changeTag(1)}>Request</li>
+                    <li className={Currenttab==2?arrCss.join(' '):cssClass.column} onClick={()=>changeTag(2)}>User</li>
                 </ul>
 
                 <div className={cssClass.requestBlock}>
-                    <SearchBar Search={this.searchValue}/>
+                    <SearchBar Search={searchValue}/>
                    
 
                     <div className={cssClass.requestContainer}>
-                        {this.state.RequestItemList?this.state.RequestItemList.map(value=>{
+                        {RequestItemList?RequestItemList.map(value=>{
                         
                             if(value==null)
                             {
                                 return null;
                             }
                             return (
-                            <ResoursItems onClick={this.DetailPageNavigator} id={value.id} title={value.title} 
+                            <ResoursItems  id={value.id} title={value.title} 
                             iconLink={value.icon_url}
                             link={value.link}
                             Description={value.description}
@@ -180,6 +185,17 @@ class Resourse extends Component
                 </div>
             </Aux>
         )
-    }
+    
 }
+
+function InitialLoader (store,parameter){
+  
+    //console.log('FRom load',parameter)
+    return new Promise((resolve,error)=>{
+        resolve()
+    })
+ 
+}
+export {InitialLoader}
+export {Resourse}
 export default Errorhandler(Resourse,axios);

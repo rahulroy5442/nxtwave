@@ -1,7 +1,6 @@
-import React,{Component} from 'react'
+import React,{useEffect, useReducer} from 'react'
 import Aux from '../../hoc/Auxiliary.js'
 import cssClass from './ResourseDetail.module.css'
-
 import SearchBar from '../../component/Navigation/UI/SearchBar/SearchBar.js';
 import axios from 'axios';
 import Errorhandler from '../../hoc/ErrorHandler/ErrorHandlerWrapper.js';
@@ -9,36 +8,67 @@ import ResoursItemsDetails from '../../component/RequestDetailComponent/RequestD
 import Button from '../../hoc/Buttom/Buttom.js';
 import ResourseItemList from '../../component/resourseItemList/resourseItem';
 import Communication from  '../../component/Communication/Communication';
-import Wrapper from '../../hoc/Wrapper/Wrapper.js';
-//Resourse Detail Page for /${ResourseId}
-class ResourseDetails extends Component
-{
-    state={
-        RequestItemDetails:null,
-                Error:{},
-                hidden:true,
+import {connect} from 'react-redux'
+import { useNavigate ,useParams} from 'react-router-dom';
+import * as action from '../../store/action/Action'
 
-                itemRequestToBedelete:[],
-                itemTobeUpdatedId:0,
-                IstobeUpdate:false
+const initialstate={
+        
+            Error:{},
+            hidden:true,
+
+            itemRequestToBedelete:[],
+            itemTobeUpdatedId:0,
+            IstobeUpdate:false
+}
+const reducer=(state,action)=>{
+    switch(action.type)
+    {
+        case 'RequestItemDetails':
+            return {...state,RequestItemDetails:action.RequestItemDetails}
+            
+        case 'Error':
+            return {...state,Error:action.Error}
+            
+        case 'Hidden':
+            return {...state,hidden:action.hidden}
+        case 'ItemRequestToBedelete':
+            return {...state,itemRequestToBedelete:action.itemRequestToBedelete}
+        case 'ItemTobeUpdatedId':
+            return {...state,itemTobeUpdatedId:action.itemTobeUpdatedId}
+        case 'IstobeUpdate':
+            return {...state,IstobeUpdate:action.IstobeUpdate}
+        case 'CancelUpdate':
+            return {...state,IstobeUpdate:false}
+        case 'Reset':
+            return {...action.reset}
+            default:
+                return state
+    } 
+}
+const ResourseDetails=(props)=>
+{
+
+    const [todos,dispatch]=useReducer(reducer,initialstate)
+    const params = useParams();
+
+    const navigate=useNavigate();
+
+  const hidder=()=>{
+        dispatch({type:'Hidden',hidden:!todos.hidden})
+        
     }
-   
-    hidder=()=>{
-        this.setState((prevstate,props)=>{
-                    return {hidden:!prevstate.hidden}
-                }
-        )
-    }
-    Sortit=(type)=>{
+   const Sortit=(type)=>{
        // (type)
-        const array=this.state.RequestItemDetails.resource_items
+        const array=props.RequestItemDetails.resource_items
+       // console.log("JKD")
         if(type==1)
         {
-            //Date
-
+       
             array.sort(
                 (a, b) => 
                 (a.createdAt <b.createdAt) ? 1 : (a.createdAt > b.createdAt) ? -1 : 0);
+                //console.log(array)
         }
         else if(type==2)
         {//Asscending
@@ -54,18 +84,22 @@ class ResourseDetails extends Component
                 (a, b) => 
                 (a.title <b.title) ? 1 : (a.title > b.title) ? -1 : 0);
         }
-        const updateValue=this.state.RequestItemDetails;
+        const updateValue=props.RequestItemDetails;
        // (array);
         updateValue.resource_items=array
-        this.setState({RequestItemDetails:updateValue})
+
+     
+
+        props.UpdateItems({...updateValue})
+       
     }
 
      
 
-    selectedItems=(value)=>{
+    const selectedItems=(value)=>{
          
-        let myArray=this.state.itemRequestToBedelete;
-       // (myArray)
+        let myArray=todos.itemRequestToBedelete;
+    
         if(myArray.includes(value))
         {
             
@@ -73,41 +107,30 @@ class ResourseDetails extends Component
                 
                 return val!=value 
             })
+            dispatch({type:'ItemRequestToBedelete',itemRequestToBedelete:myArray})
 
-            this.setState({itemRequestToBedelete:myArray})
-           // (myArray)
             return
         }
         myArray.push(value)
 
        
-        // this.state.RequestItemDetails.foreach(values=>{
-        //     if(values.id==value)
-        //     {
-        //         myArray.push(value);
-        //     }
-        // })
-
-        this.setState({itemRequestToBedelete:myArray})
-    }
-    componentDidMount()
-    {
-        const parameter=this.props.params
-    
-        axios.get(`https://media-content.ccbp.in/website/react-assignment/resource/${parameter.id}.json`).then(response=>{
-           this.setState({RequestItemDetails:response.data})
-          // (response.data);
-       }).catch(e=>{
-           
-           this.setState({Error:e})
-       })
-
+        dispatch({type:'ItemRequestToBedelete',itemRequestToBedelete:myArray})
      
-        // WebFont.load({
-        //     google: {
-        //       families: ['HK Grotesk']
-        //     }
-        //   });
+    }
+    useEffect(()=>
+    {
+        const parameter=params
+        props.AddItems(parameter)
+        dispatch({type:'Reset',reset:{
+        
+            Error:{},
+            hidden:true,
+
+            itemRequestToBedelete:[],
+            itemTobeUpdatedId:0,
+            IstobeUpdate:false
+            }})
+
 
           import('webfontloader').then(obj=>{
 
@@ -117,69 +140,67 @@ class ResourseDetails extends Component
                 }
               })
           });
-    }
-  
-    removeItems=()=>{
-        
-       const removeElement=this.state.RequestItemDetails.resource_items.filter((val)=>{
 
-        if(this.state.itemRequestToBedelete.includes(val.id))
+          return ()=>{
+           props.UpdateItems(null)
+          }
+    },[])
+  
+   const removeItems=()=>{
+        
+       const removeElement=props.RequestItemDetails.resource_items.filter((val)=>{
+
+        if(todos.itemRequestToBedelete.includes(val.id))
         {
             return false
         }
         return true;
        })
       // (removeElement)
-       const ReqDetails={...this.state.RequestItemDetails}
+       const ReqDetails={...props.RequestItemDetails}
        ReqDetails.resource_items=removeElement
-
-       this.setState({RequestItemDetails:ReqDetails,itemRequestToBedelete:[]})
+       dispatch({type:'RemoveItem',RequestItemDetails:ReqDetails,itemRequestToBedelete:[]})
+       
     }
-    updateResourse=(value)=>{
+    const updateResourse=(value)=>{
 
-        if(this.state.IstobeUpdate)
+        if(todos.IstobeUpdate)
         {
             // ("Update")
-            const UpdatedItems={...this.state.RequestItemDetails,...value}
+            const UpdatedItems={...props.RequestItemDetails,...value}
 
-            //  (value,this.state.RequestItemDetails,UpdatedItems)
-            this.setState({RequestItemDetails:UpdatedItems})
+            
+            props.UpdateItems(UpdatedItems)
+         
+           
         }
+        dispatch({type:'IstobeUpdate',IstobeUpdate:!todos.IstobeUpdate})
+     
+    }
+   const CancelUpdate=(CallBack)=>{
 
-        this.setState((prevstate,props)=>{
-            return {IstobeUpdate:!prevstate.IstobeUpdate}
-        })
+        CallBack(props.RequestItemDetails)
+        dispatch({type:'CancelUpdate',IstobeUpdate:false})
+   
     }
-    CancelUpdate=(CallBack)=>{
+     const goBack=()=>{
+    //    console.log(props.id)
+        navigate('/', {replace: true});
+    }
 
-        CallBack(this.state.RequestItemDetails)
-    
-        this.setState({IstobeUpdate:false,RequestItemDetails:this.state.RequestItemDetails})
-
-    }
-    Goback=()=>{
-        
-    }
-    changeITNI=()=>{
-        this.setState({RequestItemDetails:{...this.state.RequestItemDetails,title:"Rahul"}})
-    }
-    render()
-    {
-       //("SKKKKKKK")
-        // (this.state.itemRequestToBedelete)
-        // (this.state.hidden)
-        return(this.state.RequestItemDetails?<Aux>
-             
+   
+        return((props.RequestItemDetails && !props.Error)?<Aux>
+                
                 <div className={cssClass.MainContaner}>
             
                 
                             
                 <div className={cssClass.requestBlock}>
-                <div style={{cursor:'pointer'}} onClick={this.props.GoBack}>Back</div>
-                    <ResoursItemsDetails updateResourse={this.updateResourse} CancelUpdate={this.CancelUpdate} IstobeUpdate={this.state.IstobeUpdate} onSubmit={this.updateResourse} title={this.state.RequestItemDetails.title} 
-                            iconLink={this.state.RequestItemDetails.icon_url}
-                            link={this.state.RequestItemDetails.link}
-                            Description={this.state.RequestItemDetails.description}
+                <div style={{cursor:'pointer'}} onClick={goBack}>Back</div>
+                    <ResoursItemsDetails data-test="ResourceHeader" updateResourse={updateResourse} CancelUpdate={CancelUpdate} IstobeUpdate={todos.IstobeUpdate} onSubmit={updateResourse} title={props.RequestItemDetails.title} 
+                            iconLink={props.RequestItemDetails.icon_url}
+                            link={props.RequestItemDetails.link}
+                            Description={props.RequestItemDetails.description}
                             category={"Category789456"}/> 
                     
                     
@@ -189,17 +210,17 @@ class ResourseDetails extends Component
                     <div style={{display:'flex',flexDirection:'row',width:'100%'}}>
                     <div className={cssClass.searchBlock}><h3>Items</h3> <SearchBar/></div>
                     <div className={cssClass.Main}>
-                            <Communication Sortit={this.Sortit} status={this.state.hidden}/>
-                            <div onClick={this.hidder} className={cssClass.Container}>Sort</div>
+                            <Communication Sortit={Sortit} status={todos.hidden}/>
+                            <div onClick={hidder} className={cssClass.Container}>Sort</div>
                             </div>
                     </div>
 
 
                     <div className={cssClass.requestContainer}>
                         <div></div>
-                    {this.state.RequestItemDetails.resource_items.map(res=>{
+                    {props.RequestItemDetails.resource_items.map(res=>{
 
-                        return (<ResourseItemList check={this.state.itemRequestToBedelete.includes(res.id)} onclick={()=>this.selectedItems(res.id)} title={res.title} description={res.description} link={res.link}/>)
+                        return (<ResourseItemList check={todos.itemRequestToBedelete.includes(res.id)} onclick={()=>selectedItems(res.id)} title={res.title} description={res.description} link={res.link}/>)
                     })}
                      
                     </div>
@@ -208,14 +229,35 @@ class ResourseDetails extends Component
                     
 
                         
-                        <Button BackGroundcolor={this.state.itemRequestToBedelete.length>0?'#D7DFE9':'#2DCA73'} disable={this.state.itemRequestToBedelete.length>0} color={'white'} width={'93px'} height={'40px'}>Add Items</Button>
-                        <Button onclick={this.removeItems} BackGroundcolor={this.state.itemRequestToBedelete.length>0?'#FF0B37':'#D7DFE9'} disable={!(this.state.itemRequestToBedelete.length>0)} color={'white'} width={'93px'} height={'40px'}>Delete</Button>
+                        <Button BackGroundcolor={todos.itemRequestToBedelete.length>0?'#D7DFE9':'#2DCA73'} disable={todos.itemRequestToBedelete.length>0} color={'white'} width={'93px'} height={'40px'}>Add Items</Button>
+                        <Button onclick={removeItems} BackGroundcolor={todos.itemRequestToBedelete.length>0?'#FF0B37':'#D7DFE9'} disable={!(todos.itemRequestToBedelete.length>0)} color={'white'} width={'93px'} height={'40px'}>Delete</Button>
              
                     </div>
                     </div>
 
                 </div>
-            </Aux>:null)
+            </Aux>:<div>{props.Error}</div>)
+    
+}
+
+const state=(stateManager)=>{
+    return {
+        RequestItemDetails:stateManager.ResourseItems.ResourseItems,
+        Error:stateManager.ResourseItems.ReError
     }
 }
-export default Errorhandler(ResourseDetails,axios);
+const dispatch=(dispatcher)=>{
+   
+    return {
+        AddItems:(parameter)=>dispatcher(action.AddResourseItems(parameter)),
+        UpdateItems:(updateValue)=>dispatcher(action.UpdateResourseItems(updateValue))
+    }
+}
+function InitialLoader (store,parameter){
+  
+  //  console.log('We go',store.getState());
+    return store.dispatch(action.AddResourseItems(parameter))
+ 
+}
+export {InitialLoader}
+export default connect(state,dispatch)(Errorhandler(ResourseDetails,axios));

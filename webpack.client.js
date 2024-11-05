@@ -3,9 +3,10 @@ const autoprefixer=require('autoprefixer')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack=require('webpack')
-
+const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 const TerserPlugin = require("terser-webpack-plugin");
-
+const LoadablePlugin = require("@loadable/webpack-plugin");
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 module.exports={
     
     mode: 'production',
@@ -72,8 +73,9 @@ module.exports={
     devtool : 'source-map', */
     ,
     plugins: [
+         new LoadablePlugin(),
         new HtmlWebpackPlugin({
-            template: __dirname + '/src/index.html',
+            template: __dirname + '/src/Main.html',
             filename: 'Main.html',
             inject: 'body'
         }),
@@ -81,7 +83,12 @@ module.exports={
             filename: 'css/[name].css',  // prepend folder name
             chunkFilename: 'css/[name].css',    // prepend folder name
             ignoreOrder: false,
-        })
+        }),
+        new webpack.WatchIgnorePlugin({
+            paths:[path.resolve(__dirname, 'src/server')]}
+        )
+       
+  
     ]
 
 };

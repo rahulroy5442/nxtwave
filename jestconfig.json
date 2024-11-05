@@ -1,0 +1,5 @@
+{
+    "resetMocks": true,
+    "snapshotSerializers": ["enzyme-to-json/serializer"],
+    "setupFiles": ["<rootDir>/src/setupTests.js"]
+}
